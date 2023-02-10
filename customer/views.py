@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login
-from store.models import Products,Carts,Orders
+from store.models import Products,Carts,Orders,Offers
 
 class SignUpView(View):
 
@@ -39,8 +39,6 @@ class SignInView(View):
                 return redirect("home")
             else:
                 return render(request,"login.html",{"form":form})
-
-
 
 
 class IndexView(View):
@@ -111,3 +109,9 @@ class OrderCancellView(View):
         id=kwargs.get("id")
         Orders.objects.filter(id=id).update(status="cancelled")
         return redirect("my-orders")
+
+class DiscountProductsView(View):
+
+    def get(self,request,*args,**kwargs):
+        qs=Offers.objects.all()
+        return render(request,"offer-products.html",{"offers":qs})
